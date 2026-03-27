@@ -1,0 +1,43 @@
+import java.util.ArrayList;
+
+public class Playlist {
+    String nome;
+    ArrayList<Musica> musicas = new ArrayList<>();
+
+    public Playlist(String nome) {
+        this.nome = nome;
+    }
+
+    void adicionarMusica(Musica musica) {
+        musicas.add(musica);
+    }
+
+    void removerMusica(int indice) {
+        if (indice >= 0 && indice < musicas.size()) {
+            musicas.remove(indice);
+        } else {
+            System.out.println("❌ Índice inválido!");
+        }
+    }
+
+    void listarMusicas() {
+        if (musicas.isEmpty()) {
+            System.out.println("Vazia.");
+        } else {
+            for (int i = 0; i < musicas.size(); i++) {
+                System.out.print((i + 1) + ". ");
+                musicas.get(i).exibir();
+            }
+        }
+    }
+
+    int getDuracaoTotal() {
+        int total = 0;
+        for (Musica m : musicas) total += m.duracaoSegundos;
+        return total;
+    }
+
+    int getQuantidadeMusicas() {
+        return musicas.size();
+    }
+}
