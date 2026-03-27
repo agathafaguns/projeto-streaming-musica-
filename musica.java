@@ -1,0 +1,31 @@
+public class Musica {
+    String titulo;
+    String artista;
+    int duracaoSegundos;
+    String genero;
+
+    // Construtor para facilitar a criação
+    public Musica(String titulo, String artista, int duracaoSegundos, String genero) {
+        this.titulo = titulo;
+        this.artista = artista;
+        this.duracaoSegundos = duracaoSegundos;
+        this.genero = genero;
+    }
+
+    void exibir() {
+        System.out.printf("%s | %s | %s | %s%n", 
+            titulo, artista, getDuracaoFormatada(), genero);
+    }
+
+    String getDuracaoFormatada() {
+        return String.format("%d:%02d", duracaoSegundos / 60, duracaoSegundos % 60);
+    }
+
+    boolean contemTitulo(String busca) {
+        return this.titulo.toLowerCase().contains(busca.toLowerCase());
+    }
+
+    boolean contemArtista(String busca) {
+        return this.artista.toLowerCase().contains(busca.toLowerCase());
+    }
+}
