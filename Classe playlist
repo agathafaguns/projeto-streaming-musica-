@@ -33,11 +33,9 @@ public class Playlist {
 
     int getDuracaoTotal() {
         int total = 0;
-        for (Musica m : musicas) total += m.duracaoSegundos;
+        for (Musica m : musicas) {
+            total = total + m.duracaoSegundos;
+        }
         return total;
-    }
-
-    int getQuantidadeMusicas() {
-        return musicas.size();
     }
 }
