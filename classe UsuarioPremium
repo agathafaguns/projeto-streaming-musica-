@@ -1,0 +1,43 @@
+import java.util.ArrayList;
+
+public class UsuarioPremium extends Usuario {
+    private String plano;
+    private ArrayList<Musica> baixadas;
+
+    public UsuarioPremium(String nome, String email, String plano) {
+        super(nome, email);
+        this.plano = plano;
+        this.baixadas = new ArrayList<>();
+    }
+
+    @Override
+    public void reproduzirMusica(Musica musica) {
+        System.out.println("🎵 ALTA QUALIDADE: " + musica.titulo);
+        historico.add(musica);
+    }
+
+    public void baixarMusica(Musica musica) {
+        // Verifica se já foi baixada
+        for (Musica m : baixadas) {
+            if (m.titulo.equals(musica.titulo)) {
+                System.out.println("ℹ️ Música já baixada!");
+                return;
+            }
+        }
+        baixadas.add(musica);
+        System.out.println("⬇️ Download: " + musica.titulo);
+    }
+
+    public void verBaixadas() {
+        System.out.println("\n--- MÚSICAS BAIXADAS ---");
+        if (baixadas.isEmpty()) {
+            System.out.println("Nenhuma música baixada.");
+        } else {
+            for (Musica m : baixadas) {
+                m.exibir();
+            }
+        }
+    }
+
+    // Não tem limite de playlists, então não precisa sobrescrever
+}
