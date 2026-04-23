@@ -1,27 +1,47 @@
 import java.util.ArrayList;
 
 public class Usuario {
-    String nome;
-    ArrayList<Playlist> playlists = new ArrayList<>();
+    protected String nome;
+    protected String email;
+    protected ArrayList<Playlist> playlists;
+    protected ArrayList<Musica> historico;
 
-    public Usuario(String nome) {
+    public Usuario(String nome, String email) {
         this.nome = nome;
+        this.email = email;
+        this.playlists = new ArrayList<>();
+        this.historico = new ArrayList<>();
     }
 
-    void criarPlaylist(String nome) {
-        playlists.add(new Playlist(nome));
+    public void reproduzirMusica(Musica musica) {
+        System.out.println("🎵 Tocando: " + musica.titulo);
+        historico.add(musica);
     }
 
-    Playlist getPlaylist(int indice) {
-        if (indice >= 0 && indice < playlists.size()) {
-            return playlists.get(indice);
+    public void verHistorico() {
+        System.out.println("\n--- HISTÓRICO ---");
+        if (historico.isEmpty()) {
+            System.out.println("Nenhuma música tocada.");
+        } else {
+            for (Musica m : historico) {
+                m.exibir();
+            }
         }
-        return null;
     }
 
-    void listarPlaylists() {
-        for (int i = 0; i < playlists.size(); i++) {
-            System.out.println(i + ". " + playlists.get(i).nome);
+    public void criarPlaylist(String nome) {
+        Playlist nova = new Playlist(nome);
+        playlists.add(nova);
+        System.out.println("✅ Playlist '" + nome + "' criada!");
+    }
+
+    public void listarPlaylists() {
+        if (playlists.isEmpty()) {
+            System.out.println("Nenhuma playlist.");
+        } else {
+            for (int i = 0; i < playlists.size(); i++) {
+                System.out.println(i + ". " + playlists.get(i).nome);
+            }
         }
     }
 }
