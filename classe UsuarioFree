@@ -1,0 +1,40 @@
+public class UsuarioFree extends Usuario {
+    private int musicasTocadas;
+    private final int LIMITE = 30;
+
+    public UsuarioFree(String nome, String email) {
+        super(nome, email);
+        this.musicasTocadas = 0;
+    }
+
+    @Override
+    public void reproduzirMusica(Musica musica) {
+        // Verifica se atingiu o limite
+        if (musicasTocadas >= LIMITE) {
+            System.out.println("❌ Limite diário atingido!");
+            System.out.println("💎 Faça upgrade para Premium!");
+            return;
+        }
+
+        musicasTocadas++;
+        
+        // Anúncio a cada 3 músicas
+        if (musicasTocadas % 3 == 0) {
+            System.out.println("\n📢 ANÚNCIO: Assine Premium e ouça sem pausas!");
+        }
+        
+        super.reproduzirMusica(musica);
+        System.out.println("📊 Faltam " + (LIMITE - musicasTocadas) + " músicas hoje.");
+    }
+
+    @Override
+    public void criarPlaylist(String nome) {
+        // Limite de 3 playlists
+        if (playlists.size() >= 3) {
+            System.out.println("❌ Limite de 3 playlists atingido!");
+            System.out.println("💎 Premium tem playlists ilimitadas!");
+            return;
+        }
+        super.criarPlaylist(nome);
+    }
+}
