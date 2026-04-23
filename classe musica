@@ -4,7 +4,6 @@ public class Musica {
     int duracaoSegundos;
     String genero;
 
-    // Construtor para facilitar a criação
     public Musica(String titulo, String artista, int duracaoSegundos, String genero) {
         this.titulo = titulo;
         this.artista = artista;
@@ -13,19 +12,20 @@ public class Musica {
     }
 
     void exibir() {
-        System.out.printf("%s | %s | %s | %s%n", 
-            titulo, artista, getDuracaoFormatada(), genero);
+        System.out.println(titulo + " | " + artista + " | " + getDuracaoFormatada() + " | " + genero);
     }
 
     String getDuracaoFormatada() {
-        return String.format("%d:%02d", duracaoSegundos / 60, duracaoSegundos % 60);
+        int minutos = duracaoSegundos / 60;
+        int segundos = duracaoSegundos % 60;
+        return minutos + ":" + String.format("%02d", segundos);
     }
 
     boolean contemTitulo(String busca) {
-        return this.titulo.toLowerCase().contains(busca.toLowerCase());
+        return titulo.toLowerCase().contains(busca.toLowerCase());
     }
 
     boolean contemArtista(String busca) {
-        return this.artista.toLowerCase().contains(busca.toLowerCase());
+        return artista.toLowerCase().contains(busca.toLowerCase());
     }
 }
