@@ -1,0 +1,12 @@
+public class PlaylistPersonalizada extends Playlist {
+
+    public PlaylistPersonalizada(String nome) {
+        super(nome);
+    }
+
+    @Override
+    void reproduzir() {
+        System.out.println("Playlist Personalizada: " + nome);
+        super.reproduzir();
+    }
+}
