@@ -2,10 +2,11 @@ import java.util.ArrayList;
 
 public class Playlist {
     String nome;
-    ArrayList<Musica> musicas = new ArrayList<>();
+    ArrayList<Musica> musicas;
 
     public Playlist(String nome) {
         this.nome = nome;
+        this.musicas = new ArrayList<>();
     }
 
     void adicionarMusica(Musica musica) {
@@ -16,7 +17,7 @@ public class Playlist {
         if (indice >= 0 && indice < musicas.size()) {
             musicas.remove(indice);
         } else {
-            System.out.println("❌ Índice inválido!");
+            System.out.println("Índice inválido!");
         }
     }
 
@@ -31,11 +32,10 @@ public class Playlist {
         }
     }
 
-    int getDuracaoTotal() {
-        int total = 0;
+    void reproduzir() {
+        System.out.println("Reproduzindo playlist: " + nome);
         for (Musica m : musicas) {
-            total = total + m.duracaoSegundos;
+            System.out.println("  > " + m.titulo);
         }
-        return total;
     }
 }
