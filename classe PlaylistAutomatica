@@ -1,0 +1,40 @@
+import java.util.ArrayList;
+
+public class PlaylistAutomatica extends Playlist {
+    String criterio;
+
+    public PlaylistAutomatica(String nome, String criterio) {
+        super(nome);
+        this.criterio = criterio;
+    }
+
+    @Override
+    void reproduzir() {
+        System.out.println("Playlist Automatica: " + nome);
+        System.out.println("Criterio: " + criterio);
+        super.reproduzir();
+    }
+
+    void atualizar(ArrayList<Musica> todasMusicas) {
+        musicas.clear();
+
+        if (criterio.equals("top")) {
+            int limite = Math.min(10, todasMusicas.size());
+            for (int i = 0; i < limite; i++) {
+                musicas.add(todasMusicas.get(i));
+            }
+        } else if (criterio.equals("recomendadas")) {
+            int limite = Math.min(8, todasMusicas.size());
+            for (int i = 0; i < limite; i++) {
+                musicas.add(todasMusicas.get(i));
+            }
+        } else if (criterio.equals("recentes")) {
+            int inicio = Math.max(0, todasMusicas.size() - 12);
+            for (int i = inicio; i < todasMusicas.size(); i++) {
+                musicas.add(todasMusicas.get(i));
+            }
+        }
+
+        System.out.println("Playlist '" + nome + "' atualizada com " + musicas.size() + " musicas!");
+    }
+}
