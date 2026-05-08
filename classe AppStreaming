@@ -1,0 +1,247 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class AppStreaming {
+    static ArrayList<Musica> acervo = new ArrayList<>();
+    static ArrayList<Usuario> usuarios = new ArrayList<>();
+    static Usuario usuarioLogado = null;
+    static Scanner teclado = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        acervo.add(new Musica("Bohemian Rhapsody", "Queen", 354, "Rock"));
+        acervo.add(new Musica("Billie Jean", "Michael Jackson", 293, "Pop"));
+        acervo.add(new Musica("Imagine", "John Lennon", 183, "Pop"));
+        acervo.add(new Musica("Sweet Child O' Mine", "Guns N' Roses", 356, "Rock"));
+        acervo.add(new Musica("Hotel California", "Eagles", 391, "Rock"));
+
+        int opcao;
+        do {
+            if (usuarioLogado == null) {
+                System.out.println("\n=== SISTEMA DE STREAMING ===");
+                System.out.println("1. Criar novo usuario");
+                System.out.println("2. Login");
+                System.out.println("3. Listar usuarios");
+                System.out.println("4. Estatisticas");
+                System.out.println("0. Sair");
+                System.out.print("Escolha: ");
+                opcao = Integer.parseInt(teclado.nextLine());
+
+                if (opcao == 1) {
+                    criarUsuario();
+                } else if (opcao == 2) {
+                    fazerLogin();
+                } else if (opcao == 3) {
+                    listarUsuarios();
+                } else if (opcao == 4) {
+                    exibirEstatisticas();
+                }
+            } else {
+                System.out.println("\n=== MENU ===");
+                System.out.println("Usuario: " + usuarioLogado.nome);
+
+                if (usuarioLogado instanceof UsuarioPremium) {
+                    System.out.println("Plano: " + ((UsuarioPremium) usuarioLogado).plano);
+                } else {
+                    System.out.println("Plano: Free");
+                }
+
+                System.out.println("\n1. Ouvir musica");
+                System.out.println("2. Ver historico");
+                System.out.println("3. Criar playlist");
+                System.out.println("4. Ver playlists");
+                System.out.println("5. Listar musicas");
+                System.out.println("6. Criar playlist automatica");
+
+                if (usuarioLogado instanceof UsuarioPremium) {
+                    System.out.println("7. Baixar musica");
+                    System.out.println("8. Ver baixadas");
+                } else {
+                    System.out.println("7. Virar Premium");
+                }
+
+                System.out.println("9. Logout");
+                System.out.println("0. Sair");
+                System.out.print("Escolha: ");
+                opcao = Integer.parseInt(teclado.nextLine());
+
+                if (opcao == 1) {
+                    System.out.println("\n--- ESCOLHA UMA MUSICA ---");
+                    for (int i = 0; i < acervo.size(); i++) {
+                        System.out.print(i + ". ");
+                        acervo.get(i).exibir();
+                    }
+                    System.out.print("Numero: ");
+                    int num = Integer.parseInt(teclado.nextLine());
+                    if (num >= 0 && num < acervo.size()) {
+                        usuarioLogado.reproduzirMusica(acervo.get(num));
+                    }
+                } else if (opcao == 2) {
+                    usuarioLogado.verHistorico();
+                } else if (opcao == 3) {
+                    System.out.print("Nome da playlist: ");
+                    String nome = teclado.nextLine();
+                    usuarioLogado.criarPlaylist(nome);
+                } else if (opcao == 4) {
+                    usuarioLogado.listarPlaylists();
+                } else if (opcao == 5) {
+                    System.out.println("\n--- MUSICAS DISPONIVEIS ---");
+                    for (int i = 0; i < acervo.size(); i++) {
+                        System.out.print(i + ". ");
+                        acervo.get(i).exibir();
+                    }
+                } else if (opcao == 6) {
+                    System.out.println("\n=== PLAYLISTS AUTOMATICAS ===");
+                    System.out.println("1. Top 10 Mais Tocadas");
+                    System.out.println("2. Recomendadas");
+                    System.out.println("3. Mais Recentes");
+                    System.out.print("Escolha: ");
+                    int tipo = Integer.parseInt(teclado.nextLine());
+
+                    PlaylistAutomatica playlist = null;
+                    if (tipo == 1) {
+                        playlist = new PlaylistAutomatica("Top 10", "top");
+                    } else if (tipo == 2) {
+                        playlist = new PlaylistAutomatica("Recomendadas", "recomendadas");
+                    } else if (tipo == 3) {
+                        playlist = new PlaylistAutomatica("Recentes", "recentes");
+                    }
+
+                    if (playlist != null) {
+                        playlist.atualizar(acervo);
+                        usuarioLogado.playlists.add(playlist);
+                        System.out.println("Playlist criada e adicionada!");
+                    }
+                } else if (opcao == 7) {
+                    if (usuarioLogado instanceof UsuarioPremium) {
+                        System.out.println("\n--- ESCOLHA UMA MUSICA ---");
+                        for (int i = 0; i < acervo.size(); i++) {
+                            System.out.print(i + ". ");
+                            acervo.get(i).exibir();
+                        }
+                        System.out.print("Numero: ");
+                        int num = Integer.parseInt(teclado.nextLine());
+                        if (num >= 0 && num < acervo.size()) {
+                            ((UsuarioPremium) usuarioLogado).baixarMusica(acervo.get(num));
+                        }
+                    } else {
+                        System.out.println("\n--- VIRAR PREMIUM ---");
+                        System.out.println("Planos: 1-Mensal 2-Anual 3-Familiar");
+                        int planoOp = Integer.parseInt(teclado.nextLine());
+                        String plano;
+                        if (planoOp == 1) plano = "Mensal";
+                        else if (planoOp == 2) plano = "Anual";
+                        else plano = "Familiar";
+
+                        UsuarioPremium novo = new UsuarioPremium(usuarioLogado.nome, usuarioLogado.email, plano);
+                        novo.playlists = usuarioLogado.playlists;
+                        novo.historico = usuarioLogado.historico;
+                        novo.totalReproducoes = usuarioLogado.totalReproducoes;
+
+                        int index = usuarios.indexOf(usuarioLogado);
+                        usuarios.set(index, novo);
+                        usuarioLogado = novo;
+                        System.out.println("Agora voce e Premium!");
+                    }
+                } else if (opcao == 8) {
+                    if (usuarioLogado instanceof UsuarioPremium) {
+                        ((UsuarioPremium) usuarioLogado).verBaixadas();
+                    }
+                } else if (opcao == 9) {
+                    System.out.println("Logout: " + usuarioLogado.nome);
+                    usuarioLogado = null;
+                }
+            }
+        } while (opcao != 0);
+
+        System.out.println("Ate logo!");
+    }
+
+    static void criarUsuario() {
+        System.out.println("\n--- CRIAR USUARIO ---");
+        System.out.print("Nome: ");
+        String nome = teclado.nextLine();
+        System.out.print("Email: ");
+        String email = teclado.nextLine();
+
+        System.out.println("\n1. Free  2. Premium");
+        int tipo = Integer.parseInt(teclado.nextLine());
+
+        if (tipo == 1) {
+            usuarios.add(new UsuarioFree(nome, email));
+            System.out.println("Conta Free criada!");
+        } else {
+            System.out.println("Plano: 1-Mensal 2-Anual 3-Familiar");
+            int op = Integer.parseInt(teclado.nextLine());
+            String plano;
+            if (op == 1) plano = "Mensal";
+            else if (op == 2) plano = "Anual";
+            else plano = "Familiar";
+
+            usuarios.add(new UsuarioPremium(nome, email, plano));
+            System.out.println("Conta Premium criada!");
+        }
+    }
+
+    static void fazerLogin() {
+        if (usuarios.isEmpty()) {
+            System.out.println("Nenhum usuario cadastrado!");
+            return;
+        }
+
+        System.out.println("\n--- LOGIN ---");
+        for (int i = 0; i < usuarios.size(); i++) {
+            String tipo = "Free";
+            if (usuarios.get(i) instanceof UsuarioPremium) {
+                tipo = "Premium";
+            }
+            System.out.println((i + 1) + ". " + usuarios.get(i).nome + " (" + tipo + ")");
+        }
+
+        System.out.print("Escolha: ");
+        int escolha = Integer.parseInt(teclado.nextLine());
+
+        if (escolha > 0 && escolha <= usuarios.size()) {
+            usuarioLogado = usuarios.get(escolha - 1);
+            System.out.println("Login: " + usuarioLogado.nome);
+        }
+    }
+
+    static void listarUsuarios() {
+        System.out.println("\n--- USUARIOS ---");
+        for (int i = 0; i < usuarios.size(); i++) {
+            Usuario u = usuarios.get(i);
+            System.out.print((i + 1) + ". " + u.nome + " - ");
+            if (u instanceof UsuarioPremium) {
+                System.out.println("Premium");
+            } else {
+                System.out.println("Free");
+            }
+        }
+    }
+
+    static void exibirEstatisticas() {
+        int totalFree = 0;
+        int totalPremium = 0;
+        int reproFree = 0;
+        int reproPremium = 0;
+        int anuncios = 0;
+
+        for (Usuario u : usuarios) {
+            if (u instanceof UsuarioPremium) {
+                totalPremium++;
+                reproPremium += u.totalReproducoes;
+            } else if (u instanceof UsuarioFree) {
+                totalFree++;
+                reproFree += u.totalReproducoes;
+                anuncios += ((UsuarioFree) u).anunciosExibidos;
+            }
+        }
+
+        System.out.println("\n=== ESTATISTICAS ===");
+        System.out.println("Total usuarios: " + (totalFree + totalPremium));
+        System.out.println("Free: " + totalFree);
+        System.out.println("Premium: " + totalPremium);
+        System.out.println("Total reproducoes: " + (reproFree + reproPremium));
+        System.out.println("Anuncios exibidos: " + anuncios);
+    }
+}
