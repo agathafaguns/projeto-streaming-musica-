@@ -20,12 +20,4 @@ public class Musica {
         int segundos = duracaoSegundos % 60;
         return minutos + ":" + String.format("%02d", segundos);
     }
-
-    boolean contemTitulo(String busca) {
-        return titulo.toLowerCase().contains(busca.toLowerCase());
-    }
-
-    boolean contemArtista(String busca) {
-        return artista.toLowerCase().contains(busca.toLowerCase());
-    }
 }
