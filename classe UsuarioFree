@@ -1,11 +1,17 @@
+package br.com.streaming.modelo;
+
 public class UsuarioFree extends Usuario {
-    int musicasTocadasHoje;
-    int anunciosExibidos;
+    private int musicasTocadasHoje;
+    private int anunciosExibidos;
 
     public UsuarioFree(String nome, String email) {
         super(nome, email);
         this.musicasTocadasHoje = 0;
         this.anunciosExibidos = 0;
+    }
+
+    public int getAnunciosExibidos() {
+        return anunciosExibidos;
     }
 
     @Override
@@ -35,5 +41,10 @@ public class UsuarioFree extends Usuario {
             return;
         }
         super.criarPlaylist(nome);
+    }
+
+    @Override
+    public String getTipoUsuario() {
+        return "Free";
     }
 }
