@@ -1,7 +1,9 @@
+package br.com.streaming.modelo;
+
 import java.util.ArrayList;
 
 public class PlaylistAutomatica extends Playlist {
-    String criterio;
+    private String criterio;
 
     public PlaylistAutomatica(String nome, String criterio) {
         super(nome);
@@ -9,32 +11,47 @@ public class PlaylistAutomatica extends Playlist {
     }
 
     @Override
-    void reproduzir() {
+    public void reproduzir() {
         System.out.println("Playlist Automatica: " + nome);
         System.out.println("Criterio: " + criterio);
         super.reproduzir();
     }
 
-    void atualizar(ArrayList<Musica> todasMusicas) {
+    public void atualizar(ArrayList<Musica> todasMusicas) {
         musicas.clear();
 
         if (criterio.equals("top")) {
-            int limite = Math.min(10, todasMusicas.size());
+            int limite = 10;
+            if (todasMusicas.size() < 10) {
+                limite = todasMusicas.size();
+            }
             for (int i = 0; i < limite; i++) {
                 musicas.add(todasMusicas.get(i));
             }
         } else if (criterio.equals("recomendadas")) {
-            int limite = Math.min(8, todasMusicas.size());
+            int limite = 8;
+            if (todasMusicas.size() < 8) {
+                limite = todasMusicas.size();
+            }
             for (int i = 0; i < limite; i++) {
                 musicas.add(todasMusicas.get(i));
             }
         } else if (criterio.equals("recentes")) {
-            int inicio = Math.max(0, todasMusicas.size() - 12);
+            int inicio = todasMusicas.size() - 12;
+            if (inicio < 0) {
+                inicio = 0;
+            }
             for (int i = inicio; i < todasMusicas.size(); i++) {
                 musicas.add(todasMusicas.get(i));
             }
         }
 
-        System.out.println("Playlist '" + nome + "' atualizada com " + musicas.size() + " musicas!");
+        System.out.println("Playlist " + nome + " atualizada com " + musicas.size() + " musicas!");
+    }
+
+    @Override
+    public void exibirInfo() {
+        System.out.print("[Automatica - " + criterio + "] ");
+        super.exibirInfo();
     }
 }
