@@ -1,11 +1,13 @@
+package br.com.streaming.modelo;
+
 import java.util.ArrayList;
 
-public class Usuario {
-    String nome;
-    String email;
-    ArrayList<Playlist> playlists;
-    ArrayList<Musica> historico;
-    int totalReproducoes;
+public abstract class Usuario {
+    protected String nome;
+    protected String email;
+    protected ArrayList<Playlist> playlists;
+    protected ArrayList<Musica> historico;
+    protected int totalReproducoes;
 
     public Usuario(String nome, String email) {
         this.nome = nome;
@@ -15,8 +17,24 @@ public class Usuario {
         this.totalReproducoes = 0;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public ArrayList<Playlist> getPlaylists() {
+        return playlists;
+    }
+
+    public int getTotalReproducoes() {
+        return totalReproducoes;
+    }
+
     public void reproduzirMusica(Musica musica) {
-        System.out.println("Tocando: " + musica.titulo);
+        System.out.println("Tocando: " + musica.getTitulo());
         historico.add(musica);
         totalReproducoes++;
     }
@@ -26,8 +44,9 @@ public class Usuario {
         if (historico.isEmpty()) {
             System.out.println("Nenhuma musica tocada.");
         } else {
-            for (Musica m : historico) {
-                m.exibir();
+            for (int i = 0; i < historico.size(); i++) {
+                System.out.print((i + 1) + ". ");
+                historico.get(i).exibir();
             }
         }
     }
@@ -35,22 +54,20 @@ public class Usuario {
     public void criarPlaylist(String nome) {
         PlaylistPersonalizada nova = new PlaylistPersonalizada(nome);
         playlists.add(nova);
-        System.out.println("Playlist '" + nome + "' criada!");
+        System.out.println("Playlist " + nome + " criada!");
     }
 
     public void listarPlaylists() {
+        System.out.println("\n--- MINHAS PLAYLISTS ---");
         if (playlists.isEmpty()) {
             System.out.println("Nenhuma playlist.");
         } else {
-            System.out.println("\n--- MINHAS PLAYLISTS ---");
             for (int i = 0; i < playlists.size(); i++) {
-                Playlist p = playlists.get(i);
-                if (p instanceof PlaylistAutomatica) {
-                    System.out.println(i + ". " + p.nome + " [Automatica]");
-                } else {
-                    System.out.println(i + ". " + p.nome);
-                }
+                System.out.print((i + 1) + ". ");
+                playlists.get(i).exibirInfo();
             }
         }
     }
+
+    public abstract String getTipoUsuario();
 }
