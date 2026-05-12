@@ -1,8 +1,10 @@
+package br.com.streaming.modelo;
+
 public class Musica {
-    String titulo;
-    String artista;
-    int duracaoSegundos;
-    String genero;
+    private String titulo;
+    private String artista;
+    private int duracaoSegundos;
+    private String genero;
 
     public Musica(String titulo, String artista, int duracaoSegundos, String genero) {
         this.titulo = titulo;
@@ -11,11 +13,43 @@ public class Musica {
         this.genero = genero;
     }
 
-    void exibir() {
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getArtista() {
+        return artista;
+    }
+
+    public void setArtista(String artista) {
+        this.artista = artista;
+    }
+
+    public int getDuracaoSegundos() {
+        return duracaoSegundos;
+    }
+
+    public void setDuracaoSegundos(int duracaoSegundos) {
+        this.duracaoSegundos = duracaoSegundos;
+    }
+
+    public String getGenero() {
+        return genero;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
+    public void exibir() {
         System.out.println(titulo + " | " + artista + " | " + getDuracaoFormatada() + " | " + genero);
     }
 
-    String getDuracaoFormatada() {
+    public String getDuracaoFormatada() {
         int minutos = duracaoSegundos / 60;
         int segundos = duracaoSegundos % 60;
         return minutos + ":" + String.format("%02d", segundos);
