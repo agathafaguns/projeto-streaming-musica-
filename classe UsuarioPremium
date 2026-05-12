@@ -1,8 +1,11 @@
+package br.com.streaming.modelo;
+
+import br.com.streaming.servico.Baixavel;
 import java.util.ArrayList;
 
-public class UsuarioPremium extends Usuario {
-    String plano;
-    ArrayList<Musica> baixadas;
+public class UsuarioPremium extends Usuario implements Baixavel {
+    private String plano;
+    private ArrayList<Musica> baixadas;
 
     public UsuarioPremium(String nome, String email, String plano) {
         super(nome, email);
@@ -10,21 +13,45 @@ public class UsuarioPremium extends Usuario {
         this.baixadas = new ArrayList<>();
     }
 
+    public String getPlano() {
+        return plano;
+    }
+
     @Override
     public void reproduzirMusica(Musica musica) {
-        System.out.println("ALTA QUALIDADE: " + musica.titulo);
+        System.out.println("ALTA QUALIDADE: " + musica.getTitulo());
         super.reproduzirMusica(musica);
     }
 
-    public void baixarMusica(Musica musica) {
+    @Override
+    public void baixar(Musica musica) {
         for (Musica m : baixadas) {
-            if (m.titulo.equals(musica.titulo)) {
+            if (m.getTitulo().equals(musica.getTitulo())) {
                 System.out.println("Musica ja baixada!");
                 return;
             }
         }
         baixadas.add(musica);
-        System.out.println("Download: " + musica.titulo);
+        System.out.println("Download: " + musica.getTitulo());
+    }
+
+    @Override
+    public void removerDownload(Musica musica) {
+        if (baixadas.remove(musica)) {
+            System.out.println("Download removido: " + musica.getTitulo());
+        } else {
+            System.out.println("Musica nao encontrada nos downloads");
+        }
+    }
+
+    @Override
+    public boolean estaBaixada(Musica musica) {
+        return baixadas.contains(musica);
+    }
+
+    @Override
+    public int getTamanhoBaixados() {
+        return baixadas.size();
     }
 
     public void verBaixadas() {
@@ -32,9 +59,22 @@ public class UsuarioPremium extends Usuario {
         if (baixadas.isEmpty()) {
             System.out.println("Nenhuma musica baixada.");
         } else {
-            for (Musica m : baixadas) {
-                m.exibir();
+            for (int i = 0; i < baixadas.size(); i++) {
+                System.out.print((i + 1) + ". ");
+                baixadas.get(i).exibir();
             }
+            System.out.println("Total: " + getTamanhoBaixados() + " musicas");
         }
+    }
+
+    @Override
+    public void criarPlaylist(String nome) {
+        System.out.println("Criando playlist ilimitada...");
+        super.criarPlaylist(nome);
+    }
+
+    @Override
+    public String getTipoUsuario() {
+        return "Premium (" + plano + ")";
     }
 }
