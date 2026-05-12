@@ -1,3 +1,5 @@
+package br.com.streaming.modelo;
+
 public class PlaylistPersonalizada extends Playlist {
 
     public PlaylistPersonalizada(String nome) {
@@ -5,8 +7,14 @@ public class PlaylistPersonalizada extends Playlist {
     }
 
     @Override
-    void reproduzir() {
+    public void reproduzir() {
         System.out.println("Playlist Personalizada: " + nome);
         super.reproduzir();
+    }
+
+    @Override
+    public void exibirInfo() {
+        System.out.print("[Personalizada] ");
+        super.exibirInfo();
     }
 }
